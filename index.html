@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeadHunt — Google Maps Lead Scraper</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#f5f4f0;--surface:#fff;--border:#dddbd4;--border-strong:#b8b5ac;
+    --text:#1a1918;--text-muted:#6b6862;--text-faint:#9c9890;
+    --accent:#1a1918;--accent-text:#f5f4f0;
+    --green:#1a6640;--green-bg:#eaf3ee;
+    --red:#8b2020;--red-bg:#fdf0f0;
+    --amber:#7a4f00;--amber-bg:#fdf6e3;
+    --radius:6px;--font:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;
+  }
+  body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.5}
+
+  /* Header */
+  .header{background:var(--accent);color:var(--accent-text);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+  .header-brand{font-family:var(--mono);font-size:17px;font-weight:500}
+  .header-sub{font-size:12px;opacity:.5;font-family:var(--mono)}
+  .header-status{display:flex;align-items:center;gap:8px;font-size:12px;font-family:var(--mono);opacity:.8}
+  .hstatus-dot{width:7px;height:7px;border-radius:50%;background:#555;flex-shrink:0}
+  .hstatus-dot.online{background:#4ade80}
+
+  /* Layout */
+  .layout{max-width:1140px;margin:0 auto;padding:28px 20px;display:grid;grid-template-columns:320px 1fr;gap:24px;align-items:start}
+  @media(max-width:800px){.layout{grid-template-columns:1fr;padding:16px}}
+
+  /* Panel */
+  .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+  .panel-head{padding:12px 18px;border-bottom:1px solid var(--border);font-size:11px;font-family:var(--mono);font-weight:500;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);background:#faf9f6;display:flex;align-items:center;justify-content:space-between}
+  .panel-body{padding:18px}
+
+  /* Form */
+  .field{margin-bottom:15px}
+  .field:last-child{margin-bottom:0}
+  label{display:block;font-size:11px;font-weight:500;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
+  input[type=text],input[type=number],select{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:var(--radius);font-family:var(--font);font-size:14px;background:var(--surface);color:var(--text);transition:border-color .15s;appearance:none;-webkit-appearance:none}
+  input[type=text]:focus,input[type=number]:focus,select:focus{outline:none;border-color:var(--accent)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+  /* Range */
+  .range-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+  .range-val{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:2px 7px}
+  input[type=range]{width:100%;height:4px;appearance:none;-webkit-appearance:none;background:var(--border);border-radius:2px;cursor:pointer}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:15px;height:15px;border-radius:50%;background:var(--accent);cursor:pointer}
+  input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--accent);cursor:pointer;border:none}
+  .range-sub{display:flex;justify-content:space-between;font-size:10px;color:var(--text-faint);font-family:var(--mono);margin-top:3px}
+
+  /* Toggle */
+  .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
+  .toggle-row:last-child{border-bottom:none;padding-bottom:0}
+  .toggle-info p{font-size:14px;font-weight:500}
+  .toggle-info span{font-size:12px;color:var(--text-muted)}
+  .toggle{position:relative;width:38px;height:21px;flex-shrink:0}
+  .toggle input{opacity:0;width:0;height:0}
+  .toggle-slider{position:absolute;inset:0;background:var(--border-strong);border-radius:11px;cursor:pointer;transition:background .2s}
+  .toggle-slider::before{content:'';position:absolute;width:15px;height:15px;left:3px;top:3px;background:#fff;border-radius:50%;transition:transform .2s}
+  .toggle input:checked+.toggle-slider{background:var(--accent)}
+  .toggle input:checked+.toggle-slider::before{transform:translateX(17px)}
+
+  /* Buttons */
+  .btn{width:100%;padding:11px;background:var(--accent);color:var(--accent-text);border:none;border-radius:var(--radius);font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;transition:opacity .15s,transform .1s;margin-top:18px}
+  .btn:hover{opacity:.87}
+  .btn:active{transform:scale(.99)}
+  .btn:disabled{opacity:.38;cursor:not-allowed;transform:none}
+  .btn-secondary{background:transparent;color:var(--text);border:1px solid var(--border-strong);margin-top:8px}
+  .btn-secondary:hover{background:var(--bg);opacity:1}
+  .btn-sm{width:auto;padding:7px 14px;font-size:13px;margin:0}
+
+  /* Backend URL */
+  .api-note{font-size:11px;color:var(--text-muted);background:var(--amber-bg);border:1px solid #e8d8a0;border-radius:var(--radius);padding:10px 12px;margin-top:16px;font-family:var(--mono)}
+  .api-note input{margin-top:5px;font-size:11px;padding:5px 8px;border-color:#e8d8a0;background:#fffdf5}
+
+  /* Status bar */
+  .status-bar{display:flex;align-items:center;gap:8px;font-size:13px;font-family:var(--mono);margin-bottom:16px;min-height:24px}
+  .status-dot{width:8px;height:8px;border-radius:50%;background:var(--border-strong);flex-shrink:0;transition:background .3s}
+  .status-dot.running{background:#e8a020;animation:pulse 1.2s infinite}
+  .status-dot.done{background:var(--green)}
+  .status-dot.error{background:var(--red)}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  /* Progress */
+  .progress-wrap{margin-bottom:18px}
+  .progress-bg{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s ease;width:0%}
+  .progress-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);font-family:var(--mono);margin-top:5px}
+  .current-biz{font-size:12px;color:var(--text-muted);font-family:var(--mono);margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:18px}
+
+  /* Stats */
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+  @media(max-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+  .stat-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:12px 10px;text-align:center}
+  .stat-val{font-family:var(--mono);font-size:22px;font-weight:500;line-height:1}
+  .stat-lbl{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+  .stat-card.green .stat-val{color:var(--green)}
+  .stat-card.amber .stat-val{color:var(--amber)}
+
+  /* Empty state */
+  .empty{text-align:center;padding:52px 20px;color:var(--text-muted)}
+  .empty-icon{font-size:32px;margin-bottom:10px;display:block;opacity:.25}
+  .empty p{font-size:14px;line-height:1.7}
+
+  /* Results header */
+  .results-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+  .results-title{font-size:14px;font-weight:600}
+
+  /* Lead cards */
+  .leads-list{display:flex;flex-direction:column;gap:9px}
+  .lead-card{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);padding:13px 15px;transition:border-color .15s;animation:fadeIn .3s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  .lead-card:hover{border-color:var(--border-strong)}
+  .lead-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:7px}
+  .lead-name{font-size:14px;font-weight:600;color:var(--text);line-height:1.3}
+  .lead-cat{font-size:12px;color:var(--text-muted);margin-top:2px}
+  .badge{font-size:10px;font-family:var(--mono);padding:3px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0}
+  .badge-green{background:var(--green-bg);color:var(--green)}
+  .lead-meta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--text-muted)}
+  .stars{color:#c9a226;letter-spacing:1px}
+  .lead-phone{font-family:var(--mono);font-size:12px;margin-top:5px;color:var(--green)}
+  .lead-addr{font-size:11px;color:var(--text-faint);margin-top:4px;font-family:var(--mono)}
+  .lead-link{display:inline-flex;align-items:center;gap:3px;font-size:11px;color:#1a56db;text-decoration:none;margin-top:5px;font-family:var(--mono)}
+  .lead-link:hover{text-decoration:underline}
+
+  .divider{border:none;border-top:1px solid var(--border);margin:14px 0}
+
+  /* Niche pills */
+  .pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .pill{padding:4px 10px;background:var(--bg);border:1px solid var(--border);border-radius:20px;font-size:11px;cursor:pointer;font-family:var(--font);color:var(--text-muted);transition:all .15s}
+  .pill:hover,.pill.active{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-brand">LeadHunt</div>
+  <div class="header-status">
+    <div class="hstatus-dot" id="conn-dot"></div>
+    <span id="conn-label">checking…</span>
+  </div>
+  <div class="header-sub">Google Maps · No-Website Leads</div>
+</header>
+
+<main class="layout">
+
+  <!-- LEFT: Config -->
+  <aside>
+    <div class="panel">
+      <div class="panel-head">Search Config</div>
+      <div class="panel-body">
+
+        <div class="field">
+          <label>Business Type</label>
+          <input type="text" id="keyword" value="plumber" placeholder="electrician, dentist…">
+          <div class="pills">
+            <button class="pill active" onclick="setPill(this,'plumber')">Plumber</button>
+            <button class="pill" onclick="setPill(this,'electrician')">Electrician</button>
+            <button class="pill" onclick="setPill(this,'dentist')">Dentist</button>
+            <button class="pill" onclick="setPill(this,'barber shop')">Barber</button>
+            <button class="pill" onclick="setPill(this,'AC repair')">AC Repair</button>
+            <button class="pill" onclick="setPill(this,'carpenter')">Carpenter</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Location</label>
+          <input type="text" id="location" value="Karachi" placeholder="City or area…">
+        </div>
+
+        <hr class="divider">
+
+        <div class="field">
+          <div class="range-head">
+            <label style="margin:0">Max Results</label>
+            <span class="range-val" id="max-val">50</span>
+          </div>
+          <input type="range" id="max_results" min="10" max="200" step="10" value="50"
+            oninput="document.getElementById('max-val').textContent=this.value">
+          <div class="range-sub"><span>10</span><span>200</span></div>
+        </div>
+
+        <div class="row2">
+          <div class="field">
+            <div class="range-head">
+              <label style="margin:0">Min Rating</label>
+              <span class="range-val" id="rating-val">4.0★</span>
+            </div>
+            <input type="range" id="min_rating" min="0" max="5" step="0.5" value="4.0"
+              oninput="document.getElementById('rating-val').textContent=parseFloat(this.value).toFixed(1)+'★'">
+            <div class="range-sub"><span>0</span><span>5★</span></div>
+          </div>
+          <div class="field">
+            <div class="range-head">
+              <label style="margin:0">Min Reviews</label>
+              <span class="range-val" id="reviews-val">5</span>
+            </div>
+            <input type="range" id="min_reviews" min="0" max="100" step="1" value="5"
+              oninput="document.getElementById('reviews-val').textContent=this.value">
+            <div class="range-sub"><span>0</span><span>100</span></div>
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <p>No website only</p>
+              <span>Skip businesses with a website</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="no_website_only" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <p>Require phone number</p>
+              <span>Only leads that have a phone</span>
+            </div>
+            <label class="toggle">
+              <input type="checkbox" id="require_phone">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <button class="btn" id="start-btn" onclick="startScrape()">Start Scraping →</button>
+        <button class="btn btn-secondary" id="stop-btn" style="display:none" onclick="stopScrape()">Stop</button>
+
+        <div class="api-note">
+          ⚙ Backend:
+          <input type="text" id="api-url" value="http://localhost:8000">
+        </div>
+
+      </div>
+    </div>
+  </aside>
+
+  <!-- RIGHT: Results -->
+  <section>
+    <div class="panel">
+      <div class="panel-head">
+        <span>Live Results</span>
+        <span id="sse-indicator" style="font-size:10px;opacity:.6"></span>
+      </div>
+      <div class="panel-body">
+
+        <div class="status-bar" id="status-bar" style="visibility:hidden">
+          <div class="status-dot" id="status-dot"></div>
+          <span id="status-text">Idle</span>
+        </div>
+
+        <div id="progress-section" style="display:none">
+          <div class="progress-wrap">
+            <div class="progress-bg"><div class="progress-fill" id="progress-fill"></div></div>
+            <div class="progress-meta">
+              <span id="progress-pct">0%</span>
+              <span id="progress-count">0 / 0</span>
+            </div>
+          </div>
+          <div class="current-biz" id="current-biz"></div>
+        </div>
+
+        <div class="stats-grid" id="stats-section" style="display:none">
+          <div class="stat-card green"><div class="stat-val" id="s-qualified">0</div><div class="stat-lbl">Leads</div></div>
+          <div class="stat-card"><div class="stat-val" id="s-processed">0</div><div class="stat-lbl">Scanned</div></div>
+          <div class="stat-card amber"><div class="stat-val" id="s-no-website">0</div><div class="stat-lbl">No Website</div></div>
+          <div class="stat-card"><div class="stat-val" id="s-has-website">0</div><div class="stat-lbl">Has Website</div></div>
+        </div>
+
+        <div id="leads-section">
+          <div class="empty" id="empty-state">
+            <span class="empty-icon">⬡</span>
+            <p>Configure your search and hit <strong>Start Scraping</strong>.<br>
+            Leads stream in real-time as they're found.</p>
+          </div>
+
+          <div id="results-hd" class="results-hd" style="display:none">
+            <span class="results-title" id="results-count">0 leads</span>
+            <button class="btn btn-secondary btn-sm" onclick="downloadCSV()">↓ Download CSV</button>
+          </div>
+
+          <div class="leads-list" id="leads-list"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+let currentJobId = null;
+let evtSource = null;
+let seenLeads = new Set();
+let pollFallback = null;
+
+function apiBase() {
+  return document.getElementById('api-url').value.trim().replace(/\/$/, '');
+}
+
+// ── Connection check ──────────────────────────────────────────────────────
+async function checkConnection() {
+  try {
+    const r = await fetch(`${apiBase()}/docs`, { signal: AbortSignal.timeout(3000) });
+    if (r.ok) {
+      document.getElementById('conn-dot').className = 'hstatus-dot online';
+      document.getElementById('conn-label').textContent = 'server online';
+      return true;
+    }
+  } catch {}
+  document.getElementById('conn-dot').className = 'hstatus-dot';
+  document.getElementById('conn-label').textContent = 'server offline';
+  return false;
+}
+checkConnection();
+setInterval(checkConnection, 10000);
+
+// ── Pills ─────────────────────────────────────────────────────────────────
+function setPill(btn, kw) {
+  document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('keyword').value = kw;
+}
+
+// ── Start ─────────────────────────────────────────────────────────────────
+async function startScrape() {
+  const online = await checkConnection();
+  if (!online) {
+    setStatus('error', 'Server offline — run: python server.py');
+    return;
+  }
+
+  document.getElementById('start-btn').disabled = true;
+  document.getElementById('stop-btn').style.display = 'block';
+  document.getElementById('empty-state').style.display = 'none';
+  document.getElementById('results-hd').style.display = 'none';
+  document.getElementById('progress-section').style.display = 'block';
+  document.getElementById('stats-section').style.display = 'grid';
+  document.getElementById('leads-list').innerHTML = '';
+  document.getElementById('status-bar').style.visibility = 'visible';
+  seenLeads.clear();
+  setStatus('running', 'Starting…');
+
+  const payload = {
+    keyword:        document.getElementById('keyword').value.trim(),
+    location:       document.getElementById('location').value.trim(),
+    min_rating:     parseFloat(document.getElementById('min_rating').value),
+    min_reviews:    parseInt(document.getElementById('min_reviews').value),
+    max_results:    parseInt(document.getElementById('max_results').value),
+    no_website_only:document.getElementById('no_website_only').checked,
+    require_phone:  document.getElementById('require_phone').checked,
+  };
+
+  try {
+    const r = await fetch(`${apiBase()}/api/scrape`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    const data = await r.json();
+    currentJobId = data.job_id;
+    connectSSE(currentJobId);
+  } catch (err) {
+    setStatus('error', 'Failed to start — ' + err.message);
+    document.getElementById('start-btn').disabled = false;
+    document.getElementById('stop-btn').style.display = 'none';
+  }
+}
+
+// ── SSE ───────────────────────────────────────────────────────────────────
+function connectSSE(jobId) {
+  if (evtSource) evtSource.close();
+  evtSource = new EventSource(`${apiBase()}/api/stream/${jobId}`);
+  document.getElementById('sse-indicator').textContent = '● SSE live';
+
+  evtSource.onmessage = (e) => {
+    try {
+      const job = JSON.parse(e.data);
+      if (job.type === 'heartbeat') return;
+      updateUI(job);
+      if (job.status === 'done' || job.status === 'error') {
+        evtSource.close();
+        evtSource = null;
+        document.getElementById('sse-indicator').textContent = '';
+        onFinished(job);
+      }
+    } catch {}
+  };
+
+  evtSource.onerror = () => {
+    document.getElementById('sse-indicator').textContent = '⚠ SSE reconnecting…';
+    // Fallback to polling if SSE breaks
+    if (!pollFallback) {
+      pollFallback = setInterval(() => pollStatus(jobId), 2000);
+    }
+  };
+}
+
+async function pollStatus(jobId) {
+  try {
+    const r = await fetch(`${apiBase()}/api/status/${jobId}`);
+    const job = await r.json();
+    updateUI(job);
+    if (job.status === 'done' || job.status === 'error') {
+      clearInterval(pollFallback);
+      pollFallback = null;
+      onFinished(job);
+    }
+  } catch {}
+}
+
+function onFinished(job) {
+  document.getElementById('start-btn').disabled = false;
+  document.getElementById('stop-btn').style.display = 'none';
+  const msg = job.status === 'done'
+    ? `Done — ${job.qualified} lead${job.qualified === 1 ? '' : 's'} found`
+    : `Error: ${job.error}`;
+  setStatus(job.status, msg);
+}
+
+// ── Stop ──────────────────────────────────────────────────────────────────
+function stopScrape() {
+  if (evtSource) { evtSource.close(); evtSource = null; }
+  if (pollFallback) { clearInterval(pollFallback); pollFallback = null; }
+  setStatus('', 'Stopped');
+  document.getElementById('start-btn').disabled = false;
+  document.getElementById('stop-btn').style.display = 'none';
+  document.getElementById('sse-indicator').textContent = '';
+}
+
+// ── UI Update ─────────────────────────────────────────────────────────────
+function updateUI(job) {
+  const pct = job.progress || 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-pct').textContent = pct + '%';
+  document.getElementById('progress-count').textContent = `${job.processed || 0} / ${job.total || 0}`;
+  document.getElementById('current-biz').textContent = job.current_business || '';
+
+  const s = job.stats || {};
+  document.getElementById('s-qualified').textContent  = job.qualified || 0;
+  document.getElementById('s-processed').textContent  = s.total_processed || 0;
+  document.getElementById('s-no-website').textContent = s.no_website || 0;
+  document.getElementById('s-has-website').textContent= s.has_website || 0;
+
+  if (job.status === 'running') {
+    setStatus('running', job.current_business || 'Scanning…');
+  }
+
+  // Render new leads
+  for (const lead of (job.leads || [])) {
+    const key = lead.name + '|' + lead.address;
+    if (!seenLeads.has(key)) {
+      seenLeads.add(key);
+      renderLead(lead);
+    }
+  }
+  if (seenLeads.size > 0) {
+    document.getElementById('results-hd').style.display = 'flex';
+    document.getElementById('results-count').textContent =
+      `${seenLeads.size} lead${seenLeads.size === 1 ? '' : 's'} found`;
+  }
+}
+
+function renderLead(lead) {
+  const list = document.getElementById('leads-list');
+  const rating = lead.rating || 0;
+  const filled = Math.round(rating);
+  const stars = '★'.repeat(filled) + '☆'.repeat(Math.max(0, 5 - filled));
+  const card = document.createElement('div');
+  card.className = 'lead-card';
+  card.innerHTML = `
+    <div class="lead-top">
+      <div>
+        <div class="lead-name">${esc(lead.name)}</div>
+        ${lead.category ? `<div class="lead-cat">${esc(lead.category)}</div>` : ''}
+      </div>
+      <span class="badge badge-green">No website</span>
+    </div>
+    <div class="lead-meta">
+      ${rating ? `<span><span class="stars">${stars}</span> ${rating.toFixed(1)}</span>` : ''}
+      ${lead.review_count ? `<span>${lead.review_count} reviews</span>` : ''}
+    </div>
+    ${lead.phone ? `<div class="lead-phone">📞 ${esc(lead.phone)}</div>` : ''}
+    ${lead.address ? `<div class="lead-addr">📍 ${esc(lead.address)}</div>` : ''}
+    ${lead.google_maps_url ? `<a class="lead-link" href="${esc(lead.google_maps_url)}" target="_blank">View on Maps ↗</a>` : ''}
+  `;
+  list.prepend(card);
+}
+
+function setStatus(state, text) {
+  const dot = document.getElementById('status-dot');
+  dot.className = 'status-dot' + (state ? ' ' + state : '');
+  document.getElementById('status-text').textContent = text;
+}
+
+function downloadCSV() {
+  if (currentJobId) window.open(`${apiBase()}/api/download/${currentJobId}`, '_blank');
+}
+
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
