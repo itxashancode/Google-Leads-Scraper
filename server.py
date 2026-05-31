@@ -16,7 +16,7 @@ import uuid
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse, FileResponse
+from fastapi.responses import StreamingResponse, FileResponse, HTMLResponse
 from pydantic import BaseModel
 from playwright.async_api import async_playwright, Page, TimeoutError as PlaywrightTimeout
 import uvicorn
@@ -436,6 +436,11 @@ class GoogleMapsLeadScraper:
 # ─── FastAPI App ─────────────────────────────────────────────────────────────
 
 app = FastAPI(title="LeadHunt API")
+
+@app.get("/", response_class=HTMLResponse)
+async def root():
+    with open("index.html", "r", encoding="utf-8") as f:
+        return HTMLResponse(content=f.read())
 
 app.add_middleware(
     CORSMiddleware,
