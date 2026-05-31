@@ -235,7 +235,7 @@
 
         <div class="api-note">
           ⚙ Backend:
-          <input type="text" id="api-url" value="http://localhost:8000">
+          <input type="text" id="api-url" value="" placeholder="auto-detected">
         </div>
 
       </div>
@@ -302,7 +302,8 @@ let seenLeads = new Set();
 let pollFallback = null;
 
 function apiBase() {
-  return document.getElementById('api-url').value.trim().replace(/\/$/, '');
+  const manual = document.getElementById('api-url').value.trim().replace(/\/$/, '');
+  return manual || window.location.origin;
 }
 
 // ── Connection check ──────────────────────────────────────────────────────
