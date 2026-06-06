@@ -15,11 +15,12 @@
     --green:#1a6640;--green-bg:#eaf3ee;
     --red:#8b2020;--red-bg:#fdf0f0;
     --amber:#7a4f00;--amber-bg:#fdf6e3;
+    --blue:#1a3d8f;--blue-bg:#eef2fc;
+    --purple:#5b21b6;--purple-bg:#f3f0fd;
     --radius:6px;--font:'IBM Plex Sans',sans-serif;--mono:'IBM Plex Mono',monospace;
   }
   body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.5}
 
-  /* Header */
   .header{background:var(--accent);color:var(--accent-text);padding:16px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
   .header-brand{font-family:var(--mono);font-size:17px;font-weight:500}
   .header-sub{font-size:12px;opacity:.5;font-family:var(--mono)}
@@ -27,16 +28,13 @@
   .hstatus-dot{width:7px;height:7px;border-radius:50%;background:#555;flex-shrink:0}
   .hstatus-dot.online{background:#4ade80}
 
-  /* Layout */
   .layout{max-width:1140px;margin:0 auto;padding:28px 20px;display:grid;grid-template-columns:320px 1fr;gap:24px;align-items:start}
   @media(max-width:800px){.layout{grid-template-columns:1fr;padding:16px}}
 
-  /* Panel */
   .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
   .panel-head{padding:12px 18px;border-bottom:1px solid var(--border);font-size:11px;font-family:var(--mono);font-weight:500;text-transform:uppercase;letter-spacing:.8px;color:var(--text-muted);background:#faf9f6;display:flex;align-items:center;justify-content:space-between}
   .panel-body{padding:18px}
 
-  /* Form */
   .field{margin-bottom:15px}
   .field:last-child{margin-bottom:0}
   label{display:block;font-size:11px;font-weight:500;color:var(--text-muted);margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px}
@@ -44,7 +42,15 @@
   input[type=text]:focus,input[type=number]:focus,select:focus{outline:none;border-color:var(--accent)}
   .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-  /* Range */
+  /* Location selector */
+  .location-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .select-wrap{position:relative}
+  .select-wrap::after{content:'▾';position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:11px;color:var(--text-muted);pointer-events:none}
+  .select-wrap select{padding-right:28px}
+  .city-input-wrap{position:relative}
+  #city-custom{display:none}
+  #city-note{font-size:10px;color:var(--text-faint);font-family:var(--mono);margin-top:4px;display:none}
+
   .range-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
   .range-val{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--text);background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:2px 7px}
   input[type=range]{width:100%;height:4px;appearance:none;-webkit-appearance:none;background:var(--border);border-radius:2px;cursor:pointer}
@@ -52,7 +58,6 @@
   input[type=range]::-moz-range-thumb{width:15px;height:15px;border-radius:50%;background:var(--accent);cursor:pointer;border:none}
   .range-sub{display:flex;justify-content:space-between;font-size:10px;color:var(--text-faint);font-family:var(--mono);margin-top:3px}
 
-  /* Toggle */
   .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)}
   .toggle-row:last-child{border-bottom:none;padding-bottom:0}
   .toggle-info p{font-size:14px;font-weight:500}
@@ -64,7 +69,6 @@
   .toggle input:checked+.toggle-slider{background:var(--accent)}
   .toggle input:checked+.toggle-slider::before{transform:translateX(17px)}
 
-  /* Buttons */
   .btn{width:100%;padding:11px;background:var(--accent);color:var(--accent-text);border:none;border-radius:var(--radius);font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;transition:opacity .15s,transform .1s;margin-top:18px}
   .btn:hover{opacity:.87}
   .btn:active{transform:scale(.99)}
@@ -73,11 +77,9 @@
   .btn-secondary:hover{background:var(--bg);opacity:1}
   .btn-sm{width:auto;padding:7px 14px;font-size:13px;margin:0}
 
-  /* Backend URL */
   .api-note{font-size:11px;color:var(--text-muted);background:var(--amber-bg);border:1px solid #e8d8a0;border-radius:var(--radius);padding:10px 12px;margin-top:16px;font-family:var(--mono)}
   .api-note input{margin-top:5px;font-size:11px;padding:5px 8px;border-color:#e8d8a0;background:#fffdf5}
 
-  /* Status bar */
   .status-bar{display:flex;align-items:center;gap:8px;font-size:13px;font-family:var(--mono);margin-bottom:16px;min-height:24px}
   .status-dot{width:8px;height:8px;border-radius:50%;background:var(--border-strong);flex-shrink:0;transition:background .3s}
   .status-dot.running{background:#e8a020;animation:pulse 1.2s infinite}
@@ -85,14 +87,12 @@
   .status-dot.error{background:var(--red)}
   @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 
-  /* Progress */
   .progress-wrap{margin-bottom:18px}
   .progress-bg{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
   .progress-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s ease;width:0%}
   .progress-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--text-muted);font-family:var(--mono);margin-top:5px}
   .current-biz{font-size:12px;color:var(--text-muted);font-family:var(--mono);margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:18px}
 
-  /* Stats */
   .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
   @media(max-width:600px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
   .stat-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:12px 10px;text-align:center}
@@ -100,36 +100,105 @@
   .stat-lbl{font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
   .stat-card.green .stat-val{color:var(--green)}
   .stat-card.amber .stat-val{color:var(--amber)}
+  .stat-card.blue .stat-val{color:var(--blue)}
+  .stat-card.purple .stat-val{color:var(--purple)}
 
-  /* Empty state */
+  /* Activity log */
+  .activity-log{border:1px solid var(--border);border-radius:var(--radius);background:var(--bg);max-height:200px;overflow-y:auto;font-family:var(--mono);font-size:11px;margin-bottom:18px}
+  .activity-log-head{padding:7px 12px;border-bottom:1px solid var(--border);font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.5px;color:var(--text-muted);background:var(--surface);display:flex;justify-content:space-between;position:sticky;top:0}
+  .activity-log-body{padding:4px 0}
+  .log-row{display:flex;align-items:baseline;gap:8px;padding:3px 12px;border-bottom:1px solid transparent}
+  .log-row:hover{background:var(--surface)}
+  .log-ts{color:var(--text-faint);flex-shrink:0;width:52px}
+  .log-tag{flex-shrink:0;width:68px;font-size:10px;padding:1px 5px;border-radius:3px;text-align:center}
+  .log-tag.lead{background:var(--green-bg);color:var(--green)}
+  .log-tag.dupe{background:var(--amber-bg);color:var(--amber)}
+  .log-tag.filtered{background:var(--bg);color:var(--text-faint);border:1px solid var(--border)}
+  .log-tag.sheets_ok{background:var(--blue-bg);color:var(--blue)}
+  .log-tag.sheets_fail{background:var(--red-bg);color:var(--red)}
+  .log-tag.error{background:var(--red-bg);color:var(--red)}
+  .log-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+  .log-detail{color:var(--text-faint);flex-shrink:0;white-space:nowrap}
+
+  /* Priority tier stats */
+  .priority-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
+  .priority-chip{text-align:center;padding:8px 6px;border-radius:var(--radius);border:1px solid transparent}
+  .priority-chip .p-val{font-family:var(--mono);font-size:18px;font-weight:500}
+  .priority-chip .p-lbl{font-size:10px;font-family:var(--mono);margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+  .pc-hot{background:#fff1f1;border-color:#fca5a5;color:#991b1b}
+  .pc-warm{background:#fff7ed;border-color:#fed7aa;color:#9a3412}
+  .pc-cold{background:#eff6ff;border-color:#bfdbfe;color:#1e40af}
+  .pc-edu{background:#f5f3ff;border-color:#c4b5fd;color:#5b21b6}
+
   .empty{text-align:center;padding:52px 20px;color:var(--text-muted)}
   .empty-icon{font-size:32px;margin-bottom:10px;display:block;opacity:.25}
   .empty p{font-size:14px;line-height:1.7}
 
-  /* Results header */
   .results-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
   .results-title{font-size:14px;font-weight:600}
 
-  /* Lead cards */
+  /* Filter tabs */
+  .filter-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+  .ftab{padding:5px 12px;border-radius:20px;font-size:12px;font-family:var(--mono);border:1px solid var(--border);cursor:pointer;background:var(--surface);color:var(--text-muted);transition:all .15s}
+  .ftab:hover{border-color:var(--border-strong);color:var(--text)}
+  .ftab.active{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}
+  .ftab-hot.active{background:#991b1b;border-color:#991b1b}
+  .ftab-warm.active{background:#9a3412;border-color:#9a3412}
+  .ftab-cold.active{background:#1e40af;border-color:#1e40af}
+  .ftab-edu.active{background:#5b21b6;border-color:#5b21b6}
+
   .leads-list{display:flex;flex-direction:column;gap:9px}
+
+  /* Lead card */
   .lead-card{border:1px solid var(--border);border-radius:var(--radius);background:var(--surface);padding:13px 15px;transition:border-color .15s;animation:fadeIn .3s ease}
   @keyframes fadeIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
   .lead-card:hover{border-color:var(--border-strong)}
+  .lead-card.priority-hot{border-left:3px solid #ef4444}
+  .lead-card.priority-warm{border-left:3px solid #f97316}
+  .lead-card.priority-cold{border-left:3px solid #3b82f6}
+  .lead-card.priority-educate{border-left:3px solid #8b5cf6}
+
   .lead-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:7px}
   .lead-name{font-size:14px;font-weight:600;color:var(--text);line-height:1.3}
   .lead-cat{font-size:12px;color:var(--text-muted);margin-top:2px}
-  .badge{font-size:10px;font-family:var(--mono);padding:3px 7px;border-radius:4px;white-space:nowrap;flex-shrink:0}
+  .lead-badges{display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:flex-end;flex-shrink:0}
+
+  .badge{font-size:10px;font-family:var(--mono);padding:3px 7px;border-radius:4px;white-space:nowrap}
   .badge-green{background:var(--green-bg);color:var(--green)}
+  .badge-hot{background:#fff1f1;color:#991b1b;border:1px solid #fca5a5}
+  .badge-warm{background:#fff7ed;color:#9a3412;border:1px solid #fed7aa}
+  .badge-cold{background:#eff6ff;color:#1e40af;border:1px solid #bfdbfe}
+  .badge-edu{background:#f5f3ff;color:#5b21b6;border:1px solid #c4b5fd}
+  .badge-score{background:var(--bg);color:var(--text);border:1px solid var(--border)}
+
   .lead-meta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--text-muted)}
   .stars{color:#c9a226;letter-spacing:1px}
   .lead-phone{font-family:var(--mono);font-size:12px;margin-top:5px;color:var(--green)}
+  .lead-email{font-family:var(--mono);font-size:12px;margin-top:3px;color:var(--blue)}
   .lead-addr{font-size:11px;color:var(--text-faint);margin-top:4px;font-family:var(--mono)}
   .lead-link{display:inline-flex;align-items:center;gap:3px;font-size:11px;color:#1a56db;text-decoration:none;margin-top:5px;font-family:var(--mono)}
   .lead-link:hover{text-decoration:underline}
 
+  /* Enriched data row */
+  .lead-enrich{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+  .enrich-tag{font-size:10px;font-family:var(--mono);padding:2px 6px;border-radius:3px;background:var(--bg);border:1px solid var(--border);color:var(--text-muted)}
+  .enrich-tag.intent{background:#fdf6e3;border-color:#e8d8a0;color:#7a4f00}
+
+  /* Intent signals */
+  .intent-bar{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px}
+  .intent-pill{font-size:10px;padding:2px 7px;border-radius:10px;background:#fdf6e3;color:#7a4f00;border:1px solid #e8d8a0;font-family:var(--mono)}
+
+  /* Score bar */
+  .score-bar-wrap{margin-top:7px;display:flex;align-items:center;gap:8px}
+  .score-bar-bg{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+  .score-bar-fill{height:100%;border-radius:2px;transition:width .5s ease}
+  .score-bar-fill.high{background:#16a34a}
+  .score-bar-fill.mid{background:#d97706}
+  .score-bar-fill.low{background:#6b7280}
+  .score-label{font-size:10px;font-family:var(--mono);color:var(--text-muted);white-space:nowrap}
+
   .divider{border:none;border-top:1px solid var(--border);margin:14px 0}
 
-  /* Niche pills */
   .pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
   .pill{padding:4px 10px;background:var(--bg);border:1px solid var(--border);border-radius:20px;font-size:11px;cursor:pointer;font-family:var(--font);color:var(--text-muted);transition:all .15s}
   .pill:hover,.pill.active{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}
@@ -167,9 +236,25 @@
           </div>
         </div>
 
+        <!-- Location: Country + City dropdowns -->
         <div class="field">
           <label>Location</label>
-          <input type="text" id="location" value="Karachi" placeholder="City or area…">
+          <div class="location-grid">
+            <div class="select-wrap">
+              <select id="country-select" onchange="onCountryChange()">
+                <option value="">— Country —</option>
+              </select>
+            </div>
+            <div class="select-wrap" id="city-select-wrap">
+              <select id="city-select" onchange="onCityChange()">
+                <option value="">— City —</option>
+              </select>
+            </div>
+          </div>
+          <input type="text" id="city-custom" placeholder="Type city name…" oninput="onCustomCity()">
+          <div id="city-note">✎ Custom city — make sure spelling is correct</div>
+          <!-- Hidden input that actually gets sent to backend -->
+          <input type="hidden" id="location">
         </div>
 
         <hr class="divider">
@@ -235,7 +320,7 @@
 
         <div class="api-note">
           ⚙ Backend:
-          <input type="text" id="api-url" value="" placeholder="auto-detected">
+          <input type="text" id="api-url" value="http://localhost:8000">
         </div>
 
       </div>
@@ -272,6 +357,27 @@
           <div class="stat-card"><div class="stat-val" id="s-processed">0</div><div class="stat-lbl">Scanned</div></div>
           <div class="stat-card amber"><div class="stat-val" id="s-no-website">0</div><div class="stat-lbl">No Website</div></div>
           <div class="stat-card"><div class="stat-val" id="s-has-website">0</div><div class="stat-lbl">Has Website</div></div>
+          <div class="stat-card blue"><div class="stat-val" id="s-pushed">0</div><div class="stat-lbl">→ Sheets</div></div>
+          <div class="stat-card purple"><div class="stat-val" id="s-dupes">0</div><div class="stat-lbl">Dupes Skipped</div></div>
+          <div class="stat-card"><div class="stat-val" id="s-filtered">0</div><div class="stat-lbl">Filtered</div></div>
+          <div class="stat-card"><div class="stat-val" id="s-errors">0</div><div class="stat-lbl">Errors</div></div>
+        </div>
+
+        <!-- Activity Log -->
+        <div class="activity-log" id="activity-log" style="display:none">
+          <div class="activity-log-head">
+            <span>Live Activity</span>
+            <span id="log-count">0 events</span>
+          </div>
+          <div class="activity-log-body" id="log-body"></div>
+        </div>
+
+        <!-- Priority tier summary -->
+        <div class="priority-stats" id="priority-stats" style="display:none">
+          <div class="priority-chip pc-hot"><div class="p-val" id="p-hot">0</div><div class="p-lbl">🔥 Hot</div></div>
+          <div class="priority-chip pc-warm"><div class="p-val" id="p-warm">0</div><div class="p-lbl">☀ Warm</div></div>
+          <div class="priority-chip pc-cold"><div class="p-val" id="p-cold">0</div><div class="p-lbl">❄ Cold</div></div>
+          <div class="priority-chip pc-edu"><div class="p-val" id="p-edu">0</div><div class="p-lbl">✦ Educate</div></div>
         </div>
 
         <div id="leads-section">
@@ -286,6 +392,15 @@
             <button class="btn btn-secondary btn-sm" onclick="downloadCSV()">↓ Download CSV</button>
           </div>
 
+          <!-- Priority filter tabs -->
+          <div class="filter-tabs" id="filter-tabs" style="display:none">
+            <button class="ftab active" onclick="filterLeads('all',this)">All</button>
+            <button class="ftab ftab-hot" onclick="filterLeads('Hot',this)">🔥 Hot</button>
+            <button class="ftab ftab-warm" onclick="filterLeads('Warm',this)">☀ Warm</button>
+            <button class="ftab ftab-cold" onclick="filterLeads('Cold',this)">❄ Cold</button>
+            <button class="ftab ftab-edu" onclick="filterLeads('Educate',this)">✦ Educate</button>
+          </div>
+
           <div class="leads-list" id="leads-list"></div>
         </div>
 
@@ -296,17 +411,238 @@
 </main>
 
 <script>
+// ═══════════════════════════════════════════════════════════════
+// COUNTRY → CITY DATA
+// ═══════════════════════════════════════════════════════════════
+const LOCATIONS = {
+  "Afghanistan": ["Kabul","Kandahar","Herat","Mazar-i-Sharif"],
+  "Albania": ["Tirana","Durrës","Vlorë","Shkodër"],
+  "Algeria": ["Algiers","Oran","Constantine","Annaba"],
+  "Argentina": ["Buenos Aires","Córdoba","Rosario","Mendoza","La Plata","Tucumán"],
+  "Armenia": ["Yerevan","Gyumri","Vanadzor"],
+  "Australia": ["Sydney","Melbourne","Brisbane","Perth","Adelaide","Canberra","Darwin","Hobart"],
+  "Austria": ["Vienna","Graz","Linz","Salzburg","Innsbruck"],
+  "Azerbaijan": ["Baku","Ganja","Sumqayıt"],
+  "Bahrain": ["Manama","Riffa","Muharraq"],
+  "Bangladesh": ["Dhaka","Chittagong","Sylhet","Rajshahi","Khulna","Comilla"],
+  "Belarus": ["Minsk","Homyel","Mogilev","Vitebsk"],
+  "Belgium": ["Brussels","Antwerp","Ghent","Charleroi","Bruges"],
+  "Bolivia": ["La Paz","Santa Cruz","Cochabamba","Sucre"],
+  "Bosnia and Herzegovina": ["Sarajevo","Banja Luka","Tuzla","Mostar"],
+  "Brazil": ["São Paulo","Rio de Janeiro","Brasília","Salvador","Fortaleza","Manaus","Curitiba","Recife","Porto Alegre","Belém"],
+  "Bulgaria": ["Sofia","Plovdiv","Varna","Burgas"],
+  "Cambodia": ["Phnom Penh","Siem Reap","Battambang"],
+  "Cameroon": ["Yaoundé","Douala","Bamenda"],
+  "Canada": ["Toronto","Vancouver","Montreal","Calgary","Edmonton","Ottawa","Quebec City","Winnipeg","Halifax"],
+  "Chile": ["Santiago","Valparaíso","Concepción","Antofagasta"],
+  "China": ["Beijing","Shanghai","Guangzhou","Shenzhen","Chengdu","Wuhan","Chongqing","Xi'an","Hangzhou","Nanjing","Tianjin","Suzhou"],
+  "Colombia": ["Bogotá","Medellín","Cali","Barranquilla","Cartagena"],
+  "Congo (DRC)": ["Kinshasa","Lubumbashi","Mbuji-Mayi","Kisangani"],
+  "Costa Rica": ["San José","Alajuela","Cartago","Heredia"],
+  "Croatia": ["Zagreb","Split","Rijeka","Osijek","Dubrovnik"],
+  "Cuba": ["Havana","Santiago de Cuba","Camagüey","Holguín"],
+  "Cyprus": ["Nicosia","Limassol","Larnaca","Paphos"],
+  "Czech Republic": ["Prague","Brno","Ostrava","Plzeň"],
+  "Denmark": ["Copenhagen","Aarhus","Odense","Aalborg"],
+  "Dominican Republic": ["Santo Domingo","Santiago","San Pedro de Macorís"],
+  "Ecuador": ["Quito","Guayaquil","Cuenca"],
+  "Egypt": ["Cairo","Alexandria","Giza","Shubra El Kheima","Port Said","Luxor","Aswan"],
+  "El Salvador": ["San Salvador","Soyapango","Santa Ana"],
+  "Ethiopia": ["Addis Ababa","Dire Dawa","Adama","Gondar"],
+  "Finland": ["Helsinki","Espoo","Tampere","Oulu","Turku"],
+  "France": ["Paris","Marseille","Lyon","Toulouse","Nice","Nantes","Strasbourg","Bordeaux","Lille"],
+  "Georgia": ["Tbilisi","Batumi","Kutaisi","Rustavi"],
+  "Germany": ["Berlin","Hamburg","Munich","Cologne","Frankfurt","Stuttgart","Düsseldorf","Dortmund","Essen","Leipzig"],
+  "Ghana": ["Accra","Kumasi","Tamale","Takoradi"],
+  "Greece": ["Athens","Thessaloniki","Patras","Heraklion"],
+  "Guatemala": ["Guatemala City","Quetzaltenango","Escuintla"],
+  "Honduras": ["Tegucigalpa","San Pedro Sula","La Ceiba"],
+  "Hungary": ["Budapest","Debrecen","Miskolc","Pécs"],
+  "India": ["Mumbai","Delhi","Bangalore","Hyderabad","Chennai","Kolkata","Pune","Ahmedabad","Jaipur","Surat","Lucknow","Kanpur","Nagpur","Indore","Bhopal","Patna","Ludhiana","Agra","Nashik","Vadodara","Kochi","Coimbatore","Chandigarh","Visakhapatnam"],
+  "Indonesia": ["Jakarta","Surabaya","Bandung","Medan","Bekasi","Tangerang","Depok","Makassar","Semarang","Yogyakarta","Palembang"],
+  "Iran": ["Tehran","Mashhad","Isfahan","Karaj","Shiraz","Tabriz","Ahvaz","Qom"],
+  "Iraq": ["Baghdad","Basra","Mosul","Erbil","Sulaymaniyah","Kirkuk"],
+  "Ireland": ["Dublin","Cork","Limerick","Galway","Waterford"],
+  "Israel": ["Tel Aviv","Jerusalem","Haifa","Beer Sheva","Rishon LeZion"],
+  "Italy": ["Rome","Milan","Naples","Turin","Palermo","Genoa","Bologna","Florence","Bari","Venice"],
+  "Ivory Coast": ["Abidjan","Bouaké","Daloa","Korhogo"],
+  "Jamaica": ["Kingston","Montego Bay","Spanish Town"],
+  "Japan": ["Tokyo","Osaka","Yokohama","Nagoya","Sapporo","Kobe","Kyoto","Fukuoka","Kawasaki","Hiroshima"],
+  "Jordan": ["Amman","Zarqa","Irbid","Aqaba"],
+  "Kazakhstan": ["Almaty","Astana","Shymkent","Karaganda"],
+  "Kenya": ["Nairobi","Mombasa","Kisumu","Nakuru","Eldoret"],
+  "Kuwait": ["Kuwait City","Hawalli","Salmiya","Farwaniya"],
+  "Lebanon": ["Beirut","Tripoli","Sidon","Tyre"],
+  "Libya": ["Tripoli","Benghazi","Misrata","Sabha"],
+  "Malaysia": ["Kuala Lumpur","Johor Bahru","Penang","Ipoh","Petaling Jaya","Shah Alam","Subang Jaya","Klang","Kota Kinabalu","Kuching"],
+  "Mexico": ["Mexico City","Guadalajara","Monterrey","Puebla","Tijuana","León","Ciudad Juárez","Mérida","Cancún","Queretaro"],
+  "Morocco": ["Casablanca","Rabat","Fez","Marrakech","Tangier","Agadir","Meknes","Oujda"],
+  "Mozambique": ["Maputo","Matola","Beira","Nampula"],
+  "Myanmar": ["Yangon","Mandalay","Naypyidaw","Mawlamyine"],
+  "Nepal": ["Kathmandu","Pokhara","Lalitpur","Bharatpur","Birgunj"],
+  "Netherlands": ["Amsterdam","Rotterdam","The Hague","Utrecht","Eindhoven"],
+  "New Zealand": ["Auckland","Wellington","Christchurch","Hamilton","Tauranga"],
+  "Nicaragua": ["Managua","León","Masaya","Granada"],
+  "Nigeria": ["Lagos","Abuja","Kano","Ibadan","Port Harcourt","Benin City","Kaduna","Jos","Enugu","Aba"],
+  "North Korea": ["Pyongyang","Hamhung","Chongjin"],
+  "Norway": ["Oslo","Bergen","Trondheim","Stavanger"],
+  "Oman": ["Muscat","Salalah","Sohar","Nizwa"],
+  "Pakistan": ["Karachi","Lahore","Islamabad","Rawalpindi","Faisalabad","Multan","Peshawar","Quetta","Gujranwala","Sialkot","Hyderabad","Bahawalpur"],
+  "Panama": ["Panama City","Colón","David"],
+  "Paraguay": ["Asunción","Ciudad del Este","San Lorenzo"],
+  "Peru": ["Lima","Arequipa","Trujillo","Chiclayo","Cusco"],
+  "Philippines": ["Manila","Quezon City","Davao","Caloocan","Cebu City","Zamboanga","Antipolo","Taguig","Pasig","Makati"],
+  "Poland": ["Warsaw","Kraków","Łódź","Wrocław","Poznań","Gdańsk"],
+  "Portugal": ["Lisbon","Porto","Braga","Amadora","Coimbra"],
+  "Puerto Rico": ["San Juan","Bayamón","Carolina","Ponce"],
+  "Qatar": ["Doha","Al Wakrah","Al Rayyan","Umm Salal"],
+  "Romania": ["Bucharest","Cluj-Napoca","Timișoara","Iași","Constanța"],
+  "Russia": ["Moscow","Saint Petersburg","Novosibirsk","Yekaterinburg","Kazan","Chelyabinsk","Omsk","Rostov-on-Don","Ufa","Samara"],
+  "Saudi Arabia": ["Riyadh","Jeddah","Mecca","Medina","Dammam","Khobar","Tabuk","Abha","Taif"],
+  "Senegal": ["Dakar","Thiès","Kaolack","Saint-Louis"],
+  "Serbia": ["Belgrade","Novi Sad","Niš","Kragujevac"],
+  "Singapore": ["Singapore"],
+  "Somalia": ["Mogadishu","Hargeisa","Bosaso"],
+  "South Africa": ["Johannesburg","Cape Town","Durban","Pretoria","Port Elizabeth","Bloemfontein","East London","Pietermaritzburg"],
+  "South Korea": ["Seoul","Busan","Incheon","Daegu","Daejeon","Gwangju","Suwon","Ulsan"],
+  "Spain": ["Madrid","Barcelona","Valencia","Seville","Zaragoza","Málaga","Murcia","Bilbao"],
+  "Sri Lanka": ["Colombo","Kandy","Galle","Jaffna","Negombo"],
+  "Sudan": ["Khartoum","Omdurman","Port Sudan","Kassala"],
+  "Sweden": ["Stockholm","Gothenburg","Malmö","Uppsala"],
+  "Switzerland": ["Zurich","Geneva","Basel","Bern","Lausanne"],
+  "Syria": ["Damascus","Aleppo","Homs","Latakia","Hama"],
+  "Taiwan": ["Taipei","Kaohsiung","Taichung","Tainan","Hsinchu"],
+  "Tanzania": ["Dar es Salaam","Mwanza","Arusha","Dodoma"],
+  "Thailand": ["Bangkok","Chiang Mai","Pattaya","Hat Yai","Phuket","Khon Kaen","Udon Thani","Nakhon Ratchasima"],
+  "Tunisia": ["Tunis","Sfax","Sousse","Gabès"],
+  "Turkey": ["Istanbul","Ankara","Izmir","Bursa","Adana","Gaziantep","Konya","Antalya","Mersin","Diyarbakır"],
+  "Uganda": ["Kampala","Gulu","Lira","Mbarara"],
+  "Ukraine": ["Kyiv","Kharkiv","Odessa","Dnipro","Lviv","Zaporizhzhia","Kryvyi Rih"],
+  "United Arab Emirates": ["Dubai","Abu Dhabi","Sharjah","Ajman","Ras Al Khaimah","Fujairah","Umm Al Quwain"],
+  "United Kingdom": ["London","Birmingham","Manchester","Leeds","Glasgow","Liverpool","Sheffield","Bristol","Edinburgh","Cardiff"],
+  "United States": ["New York","Los Angeles","Chicago","Houston","Phoenix","Philadelphia","San Antonio","San Diego","Dallas","San Jose","Austin","Jacksonville","Fort Worth","Columbus","Charlotte","Indianapolis","San Francisco","Seattle","Denver","Nashville","Oklahoma City","El Paso","Washington DC","Boston","Las Vegas","Memphis","Louisville","Baltimore","Milwaukee","Albuquerque","Tucson","Fresno","Sacramento","Mesa","Kansas City","Atlanta","Omaha","Colorado Springs","Raleigh","Miami","Long Beach","Virginia Beach","Oakland","Minneapolis","Tampa","Tulsa","Arlington","New Orleans"],
+  "Uruguay": ["Montevideo","Salto","Paysandú"],
+  "Uzbekistan": ["Tashkent","Samarkand","Namangan","Andijan"],
+  "Venezuela": ["Caracas","Maracaibo","Valencia","Barquisimeto","Maracay"],
+  "Vietnam": ["Ho Chi Minh City","Hanoi","Da Nang","Can Tho","Haiphong","Bien Hoa","Hue"],
+  "Yemen": ["Sana'a","Aden","Taiz","Hodeidah"],
+  "Zimbabwe": ["Harare","Bulawayo","Chitungwiza","Mutare"]
+};
+
+// ═══════════════════════════════════════════════════════════════
+// POPULATE DROPDOWNS
+// ═══════════════════════════════════════════════════════════════
+(function initDropdowns() {
+  const countrySel = document.getElementById('country-select');
+  const sorted = Object.keys(LOCATIONS).sort();
+  sorted.forEach(c => {
+    const o = document.createElement('option');
+    o.value = c;
+    o.textContent = c;
+    // Default to Pakistan
+    if (c === 'Pakistan') o.selected = true;
+    countrySel.appendChild(o);
+  });
+  // Trigger city population for default
+  onCountryChange(true);
+})();
+
+function onCountryChange(init) {
+  const country = document.getElementById('country-select').value;
+  const citySel = document.getElementById('city-select');
+  const customInput = document.getElementById('city-custom');
+  const cityNote = document.getElementById('city-note');
+
+  citySel.innerHTML = '<option value="">— City —</option>';
+  customInput.style.display = 'none';
+  cityNote.style.display = 'none';
+
+  if (!country) {
+    document.getElementById('location').value = '';
+    return;
+  }
+
+  const cities = LOCATIONS[country] || [];
+  cities.forEach(city => {
+    const o = document.createElement('option');
+    o.value = city;
+    o.textContent = city;
+    if (city === 'Karachi') o.selected = true;
+    citySel.appendChild(o);
+  });
+
+  // Add "Other (type manually)" option
+  const other = document.createElement('option');
+  other.value = '__other__';
+  other.textContent = '✎ Other city…';
+  citySel.appendChild(other);
+
+  onCityChange(init);
+}
+
+function onCityChange(init) {
+  const country = document.getElementById('country-select').value;
+  const cityVal = document.getElementById('city-select').value;
+  const customInput = document.getElementById('city-custom');
+  const cityNote = document.getElementById('city-note');
+
+  if (cityVal === '__other__') {
+    customInput.style.display = 'block';
+    cityNote.style.display = 'block';
+    customInput.focus();
+    document.getElementById('location').value = customInput.value.trim()
+      ? `${customInput.value.trim()}, ${country}` : '';
+  } else {
+    customInput.style.display = 'none';
+    cityNote.style.display = 'none';
+    if (cityVal && country) {
+      document.getElementById('location').value = `${cityVal}, ${country}`;
+    } else if (country) {
+      document.getElementById('location').value = country;
+    } else {
+      document.getElementById('location').value = '';
+    }
+  }
+}
+
+function onCustomCity() {
+  const country = document.getElementById('country-select').value;
+  const city = document.getElementById('city-custom').value.trim();
+  document.getElementById('location').value = city ? `${city}, ${country}` : country;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// LEAD FILTER
+// ═══════════════════════════════════════════════════════════════
+let allLeads = [];
+let activeFilter = 'all';
+
+function filterLeads(priority, btn) {
+  activeFilter = priority;
+  document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+
+  const cards = document.querySelectorAll('.lead-card');
+  cards.forEach(card => {
+    const p = card.dataset.priority || '';
+    card.style.display = (priority === 'all' || p === priority) ? '' : 'none';
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// APP STATE
+// ═══════════════════════════════════════════════════════════════
 let currentJobId = null;
 let evtSource = null;
 let seenLeads = new Set();
+let seenLogEvents = 0;
 let pollFallback = null;
 
 function apiBase() {
-  const manual = document.getElementById('api-url').value.trim().replace(/\/$/, '');
-  return manual || window.location.origin;
+  return document.getElementById('api-url').value.trim().replace(/\/$/, '');
 }
 
-// ── Connection check ──────────────────────────────────────────────────────
+// ── Connection check ──────────────────────────────────────────
 async function checkConnection() {
   try {
     const r = await fetch(`${apiBase()}/docs`, { signal: AbortSignal.timeout(3000) });
@@ -323,40 +659,59 @@ async function checkConnection() {
 checkConnection();
 setInterval(checkConnection, 10000);
 
-// ── Pills ─────────────────────────────────────────────────────────────────
+// ── Pills ─────────────────────────────────────────────────────
 function setPill(btn, kw) {
   document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('keyword').value = kw;
 }
 
-// ── Start ─────────────────────────────────────────────────────────────────
+// ── Start ─────────────────────────────────────────────────────
 async function startScrape() {
+  const loc = document.getElementById('location').value.trim();
+  if (!loc) {
+    alert('Please select a country and city before starting.');
+    return;
+  }
+
   const online = await checkConnection();
   if (!online) {
     setStatus('error', 'Server offline — run: python server.py');
     return;
   }
 
+  allLeads = [];
+  activeFilter = 'all';
+  document.querySelectorAll('.ftab').forEach(t => {
+    t.classList.remove('active');
+    if (t.textContent.trim() === 'All') t.classList.add('active');
+  });
+
   document.getElementById('start-btn').disabled = true;
   document.getElementById('stop-btn').style.display = 'block';
   document.getElementById('empty-state').style.display = 'none';
   document.getElementById('results-hd').style.display = 'none';
+  document.getElementById('filter-tabs').style.display = 'none';
+  document.getElementById('priority-stats').style.display = 'none';
   document.getElementById('progress-section').style.display = 'block';
   document.getElementById('stats-section').style.display = 'grid';
+  document.getElementById('activity-log').style.display = 'block';
+  document.getElementById('log-body').innerHTML = '';
+  document.getElementById('log-count').textContent = '0 events';
   document.getElementById('leads-list').innerHTML = '';
   document.getElementById('status-bar').style.visibility = 'visible';
   seenLeads.clear();
+  seenLogEvents = 0;
   setStatus('running', 'Starting…');
 
   const payload = {
-    keyword:        document.getElementById('keyword').value.trim(),
-    location:       document.getElementById('location').value.trim(),
-    min_rating:     parseFloat(document.getElementById('min_rating').value),
-    min_reviews:    parseInt(document.getElementById('min_reviews').value),
-    max_results:    parseInt(document.getElementById('max_results').value),
-    no_website_only:document.getElementById('no_website_only').checked,
-    require_phone:  document.getElementById('require_phone').checked,
+    keyword:         document.getElementById('keyword').value.trim(),
+    location:        loc,
+    min_rating:      parseFloat(document.getElementById('min_rating').value),
+    min_reviews:     parseInt(document.getElementById('min_reviews').value),
+    max_results:     parseInt(document.getElementById('max_results').value),
+    no_website_only: document.getElementById('no_website_only').checked,
+    require_phone:   document.getElementById('require_phone').checked,
   };
 
   try {
@@ -375,7 +730,7 @@ async function startScrape() {
   }
 }
 
-// ── SSE ───────────────────────────────────────────────────────────────────
+// ── SSE ───────────────────────────────────────────────────────
 function connectSSE(jobId) {
   if (evtSource) evtSource.close();
   evtSource = new EventSource(`${apiBase()}/api/stream/${jobId}`);
@@ -397,7 +752,6 @@ function connectSSE(jobId) {
 
   evtSource.onerror = () => {
     document.getElementById('sse-indicator').textContent = '⚠ SSE reconnecting…';
-    // Fallback to polling if SSE breaks
     if (!pollFallback) {
       pollFallback = setInterval(() => pollStatus(jobId), 2000);
     }
@@ -426,7 +780,7 @@ function onFinished(job) {
   setStatus(job.status, msg);
 }
 
-// ── Stop ──────────────────────────────────────────────────────────────────
+// ── Stop ──────────────────────────────────────────────────────
 function stopScrape() {
   if (evtSource) { evtSource.close(); evtSource = null; }
   if (pollFallback) { clearInterval(pollFallback); pollFallback = null; }
@@ -436,7 +790,7 @@ function stopScrape() {
   document.getElementById('sse-indicator').textContent = '';
 }
 
-// ── UI Update ─────────────────────────────────────────────────────────────
+// ── UI Update ─────────────────────────────────────────────────
 function updateUI(job) {
   const pct = job.progress || 0;
   document.getElementById('progress-fill').style.width = pct + '%';
@@ -449,6 +803,20 @@ function updateUI(job) {
   document.getElementById('s-processed').textContent  = s.total_processed || 0;
   document.getElementById('s-no-website').textContent = s.no_website || 0;
   document.getElementById('s-has-website').textContent= s.has_website || 0;
+  document.getElementById('s-pushed').textContent     = job.pushed_to_sheets || 0;
+  document.getElementById('s-dupes').textContent      = job.skipped_dupes || 0;
+  document.getElementById('s-filtered').textContent   = (s.total_processed || 0) - (s.qualified || 0) - (s.skipped_dupes || 0) - (s.skipped_errors || 0);
+  document.getElementById('s-errors').textContent     = s.skipped_errors || 0;
+
+  // Priority counts
+  const pc = job.priority_counts || {};
+  if (pc.Hot !== undefined) {
+    document.getElementById('p-hot').textContent  = pc.Hot  || 0;
+    document.getElementById('p-warm').textContent = pc.Warm || 0;
+    document.getElementById('p-cold').textContent = pc.Cold || 0;
+    document.getElementById('p-edu').textContent  = pc.Educate || 0;
+    document.getElementById('priority-stats').style.display = 'grid';
+  }
 
   if (job.status === 'running') {
     setStatus('running', job.current_business || 'Scanning…');
@@ -459,40 +827,142 @@ function updateUI(job) {
     const key = lead.name + '|' + lead.address;
     if (!seenLeads.has(key)) {
       seenLeads.add(key);
+      allLeads.push(lead);
       renderLead(lead);
     }
   }
   if (seenLeads.size > 0) {
     document.getElementById('results-hd').style.display = 'flex';
+    document.getElementById('filter-tabs').style.display = 'flex';
     document.getElementById('results-count').textContent =
       `${seenLeads.size} lead${seenLeads.size === 1 ? '' : 's'} found`;
   }
+
+  // Render new activity log entries
+  const log = job.activity_log || [];
+  const newEntries = log.slice(seenLogEvents);
+  if (newEntries.length > 0) {
+    const logBody = document.getElementById('log-body');
+    const tagLabels = {
+      lead: 'LEAD ✓', dupe: 'DUPE', filtered: 'SKIP',
+      sheets_ok: 'SHEETS ✓', sheets_fail: 'SHEETS ✗', error: 'ERROR'
+    };
+    for (const entry of newEntries) {
+      const row = document.createElement('div');
+      row.className = 'log-row';
+      row.innerHTML = `
+        <span class="log-ts">${esc(entry.ts)}</span>
+        <span class="log-tag ${entry.type}">${tagLabels[entry.type] || entry.type}</span>
+        <span class="log-name">${esc(entry.name)}</span>
+        ${entry.detail ? `<span class="log-detail">${esc(entry.detail)}</span>` : ''}
+      `;
+      logBody.appendChild(row);
+    }
+    seenLogEvents = log.length;
+    document.getElementById('log-count').textContent = `${seenLogEvents} events`;
+    // Auto-scroll to bottom
+    const logEl = document.getElementById('activity-log');
+    logEl.scrollTop = logEl.scrollHeight;
+  }
 }
 
+// ── Render Lead Card ──────────────────────────────────────────
 function renderLead(lead) {
   const list = document.getElementById('leads-list');
   const rating = lead.rating || 0;
   const filled = Math.round(rating);
   const stars = '★'.repeat(filled) + '☆'.repeat(Math.max(0, 5 - filled));
+
+  const priority = lead.priority || '';
+  const score = lead.lead_score || 0;
+
+  const priorityBadgeClass = {
+    'Hot':     'badge-hot',
+    'Warm':    'badge-warm',
+    'Cold':    'badge-cold',
+    'Educate': 'badge-edu',
+  }[priority] || 'badge-score';
+
+  const priorityEmoji = {
+    'Hot': '🔥', 'Warm': '☀', 'Cold': '❄', 'Educate': '✦'
+  }[priority] || '';
+
+  const cardClass = {
+    'Hot': 'priority-hot', 'Warm': 'priority-warm',
+    'Cold': 'priority-cold', 'Educate': 'priority-educate'
+  }[priority] || '';
+
+  // Score bar colour
+  const scoreBarClass = score >= 60 ? 'high' : score >= 35 ? 'mid' : 'low';
+
+  // Website builder badge
+  const builderBadge = lead.website_builder
+    ? `<span class="badge badge-edu">${esc(lead.website_builder)}</span>` : '';
+
+  // Intent signals
+  let intentHtml = '';
+  if (lead.intent_signals) {
+    const labels = {
+      'online_booking': '📅 Wants booking',
+      'menu_hours':     '🕐 Needs hours/menu',
+      'website_absent': '🌐 No web presence',
+      'old_fashioned':  '📠 Old-fashioned',
+    };
+    const pills = lead.intent_signals.split(',').map(s => {
+      const lbl = labels[s.trim()] || s.trim();
+      return `<span class="intent-pill">${esc(lbl)}</span>`;
+    }).join('');
+    intentHtml = `<div class="intent-bar">${pills}</div>`;
+  }
+
+  // Enriched tags
+  const tags = [];
+  if (lead.price_level > 0) tags.push('$'.repeat(lead.price_level));
+  if (lead.business_hours_status === '24/7') tags.push('24/7');
+  if (lead.business_hours_status === 'temporarily_closed') tags.push('⚠ Temp Closed');
+  if (lead.business_hours_status === 'limited') tags.push('Limited Hours');
+  if (lead.photo_count > 0) tags.push(`${lead.photo_count} photos`);
+  if (lead.competitors_total > 0)
+    tags.push(`${lead.competitors_with_website}/${lead.competitors_total} competitors online`);
+  if (lead.days_since_last_review != null)
+    tags.push(`Last review: ${lead.days_since_last_review}d ago`);
+  const tagsHtml = tags.length
+    ? `<div class="lead-enrich">${tags.map(t=>`<span class="enrich-tag">${esc(t)}</span>`).join('')}</div>` : '';
+
   const card = document.createElement('div');
-  card.className = 'lead-card';
+  card.className = `lead-card ${cardClass}`;
+  card.dataset.priority = priority;
+  if (activeFilter !== 'all' && priority !== activeFilter) card.style.display = 'none';
+
   card.innerHTML = `
     <div class="lead-top">
       <div>
         <div class="lead-name">${esc(lead.name)}</div>
         ${lead.category ? `<div class="lead-cat">${esc(lead.category)}</div>` : ''}
       </div>
-      <span class="badge badge-green">No website</span>
+      <div class="lead-badges">
+        ${priority ? `<span class="badge ${priorityBadgeClass}">${priorityEmoji} ${priority}</span>` : ''}
+        ${score ? `<span class="badge badge-score">${score}/100</span>` : ''}
+        ${!lead.has_website ? '<span class="badge badge-green">No website</span>' : builderBadge}
+      </div>
     </div>
     <div class="lead-meta">
       ${rating ? `<span><span class="stars">${stars}</span> ${rating.toFixed(1)}</span>` : ''}
       ${lead.review_count ? `<span>${lead.review_count} reviews</span>` : ''}
+      ${lead.country ? `<span>${esc(lead.country)}</span>` : ''}
     </div>
-    ${lead.phone ? `<div class="lead-phone">📞 ${esc(lead.phone)}</div>` : ''}
+    ${score ? `<div class="score-bar-wrap">
+      <div class="score-bar-bg"><div class="score-bar-fill ${scoreBarClass}" style="width:${score}%"></div></div>
+      <span class="score-label">Score ${score}</span>
+    </div>` : ''}
+    ${intentHtml}
+    ${lead.phone ? `<div class="lead-phone">📞 ${esc(lead.phone)}${lead.phone_valid===false?' ⚠':''}</div>` : ''}
+    ${lead.email ? `<div class="lead-email">✉ ${esc(lead.email)}</div>` : ''}
     ${lead.address ? `<div class="lead-addr">📍 ${esc(lead.address)}</div>` : ''}
+    ${tagsHtml}
     ${lead.google_maps_url ? `<a class="lead-link" href="${esc(lead.google_maps_url)}" target="_blank">View on Maps ↗</a>` : ''}
   `;
-  list.prepend(card);
+  list.appendChild(card);
 }
 
 function setStatus(state, text) {
