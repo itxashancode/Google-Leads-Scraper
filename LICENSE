@@ -1,0 +1,53 @@
+MIT License
+
+Copyright (c) 2025 itxashancode
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+ADDITIONAL NOTICE — RESPONSIBLE USE
+
+This software automates interaction with Google Maps. Users are solely
+responsible for ensuring their use complies with:
+
+  • Google Maps Platform Terms of Service
+    https://cloud.google.com/maps-platform/terms
+
+  • Google Terms of Service
+    https://policies.google.com/terms
+
+  • All applicable local, national, and international laws governing
+    automated data collection, data storage, and unsolicited commercial
+    contact (including but not limited to GDPR, CCPA, CAN-SPAM, and CASL).
+
+The authors and contributors of this software:
+
+  (a) make no representations about the legality of scraping Google Maps
+      in any specific jurisdiction or use case;
+
+  (b) accept no liability for damages, losses, account suspensions, legal
+      claims, or penalties arising from use of this software;
+
+  (c) do not endorse using this software to send unsolicited communications,
+      engage in spam, harvest personal data without consent, or violate any
+      third-party terms of service.
+
+By using this software you acknowledge that you have read this notice and
+accept full responsibility for your use.
